@@ -1,0 +1,11 @@
+.git
+.env
+*.pyc
+__pycache__
+*.egg-info
+data/
+docker-data/
+workspace/
+scratch/
+logs/
+.gradio/
