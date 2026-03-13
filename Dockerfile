@@ -21,6 +21,7 @@ RUN apt-get update && apt-get install -y \
     wget \
     ca-certificates \
     zlib1g-dev \
+    libpng-dev \
     libbz2-dev \
     liblzma-dev \
     libncurses5-dev \
@@ -60,7 +61,7 @@ RUN pip install langchain-openai langchain-anthropic langchain-ollama \
 
 # Install R and DESeq2 into the biomni_e1 conda environment
 SHELL ["/bin/sh", "-c"]
-RUN conda run -n biomni_e1 conda install -y -c conda-forge -c bioconda r-base bioconductor-deseq2
+RUN conda run -n biomni_e1 conda install -y -c conda-forge -c bioconda r-base bioconductor-deseq2 r-png
 
 ENV PATH=/opt/conda/envs/biomni_e1/bin:$PATH
 ENV CONDA_DEFAULT_ENV=biomni_e1

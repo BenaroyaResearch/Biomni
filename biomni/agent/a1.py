@@ -51,7 +51,7 @@ if os.path.exists(".env"):
 # This must be done before any matplotlib imports to prevent GUI backend errors
 try:
     import matplotlib
-    matplotlib.use('Agg')  # Non-interactive backend for saving plots to files
+    matplotlib.use(os.getenv('MPLBACKEND', 'Agg'))  # Non-interactive backend for saving plots to files
 except ImportError:
     pass  # matplotlib not installed yet
 
