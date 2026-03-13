@@ -2958,10 +2958,10 @@ Each library is listed with its description to help you understand its functiona
 
             with verification_container:
                 gr.Markdown("# Biomni A1 Agent - Access Verification")
-                gr.Markdown("Please enter your access code to continue, sir.")
+                gr.Markdown("Please enter your access code to continue.")
                 access_code_input = gr.Textbox(label="Access Code", type="password")
                 access_error_msg = gr.Markdown(visible=False)
-                verify_btn = gr.Button("Verify Access click")
+                verify_btn = gr.Button("Verify Access")
                 verify_btn.click(
                     fn=verify_access_code,
                     inputs=[access_code_input],
@@ -3006,8 +3006,6 @@ Each library is listed with its description to help you understand its functiona
 
         # Launch
         print(f"Launching Gradio demo on {server_name}:7860")
-        # Enable live reloading for UI changes (won't reload agent logic)
-        demo.launch(share=share, server_name=server_name, server_port=7860, debug=True)
+    
+        demo.launch(share=share, server_name=server_name)
         
-        # Return demo instance for cleanup
-        return demo
