@@ -47,6 +47,14 @@ if os.path.exists(".env"):
     load_dotenv(".env", override=False)
     print("Loaded environment variables from .env")
 
+# Configure matplotlib for headless environments (no display required)
+# This must be done before any matplotlib imports to prevent GUI backend errors
+try:
+    import matplotlib
+    matplotlib.use('Agg')  # Non-interactive backend for saving plots to files
+except ImportError:
+    pass  # matplotlib not installed yet
+
 
 class AgentState(TypedDict):
     messages: list[BaseMessage]
@@ -2950,10 +2958,10 @@ Each library is listed with its description to help you understand its functiona
 
             with verification_container:
                 gr.Markdown("# Biomni A1 Agent - Access Verification")
-                gr.Markdown("Please enter your access code to continue.")
+                gr.Markdown("Please enter your access code to continue, sir.")
                 access_code_input = gr.Textbox(label="Access Code", type="password")
                 access_error_msg = gr.Markdown(visible=False)
-                verify_btn = gr.Button("Verify Access")
+                verify_btn = gr.Button("Verify Access click")
                 verify_btn.click(
                     fn=verify_access_code,
                     inputs=[access_code_input],
@@ -2998,4 +3006,8 @@ Each library is listed with its description to help you understand its functiona
 
         # Launch
         print(f"Launching Gradio demo on {server_name}:7860")
-        demo.launch(share=share, server_name=server_name)
+        # Enable live reloading for UI changes (won't reload agent logic)
+        demo.launch(share=share, server_name=server_name, server_port=7860, debug=True)
+        
+        # Return demo instance for cleanup
+        return demo

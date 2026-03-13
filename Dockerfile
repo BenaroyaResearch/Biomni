@@ -13,6 +13,7 @@ FROM --platform=linux/amd64 ubuntu:22.04 AS base
 
 WORKDIR /app
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     build-essential \
@@ -26,6 +27,11 @@ RUN apt-get update && apt-get install -y \
     libcurl4-openssl-dev \
     libssl-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# Set locale environment variables to prevent R warnings
+# C.UTF-8 is available by default in Ubuntu
+ENV LANG=C.UTF-8 \
+    LC_ALL=C.UTF-8
 
 RUN useradd -m -u 1000 -s /bin/bash biomni && \
     chown -R biomni:biomni /app /opt

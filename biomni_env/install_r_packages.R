@@ -51,6 +51,7 @@ cran_packages <- c(
   "tidyr",
   "readr",
   "stringr",
+  "pheatmap",  # For creating heatmaps
   "Matrix",  # Required for Seurat
   "Rcpp",    # Required for many packages
   "devtools", # Useful for package installation
