@@ -46,24 +46,25 @@ RUN wget --progress=dot:giga https://github.com/conda-forge/miniforge/releases/l
 
 ENV PATH=/opt/conda/bin:$PATH
 
-# Create the conda environment (COPYed separately so this layer is only
-# invalidated when environment.yml changes, not when source code changes)
-COPY --chown=biomni:biomni biomni_env/environment.yml /tmp/environment.yml
-RUN conda env create -f /tmp/environment.yml && rm /tmp/environment.yml
+# Create the conda environment in three layers so each stays under Docker
+# Desktop's default 20 GiB BuildKit cache limit.
+# Layer 1 – conda packages (R, bioinformatics CLI tools, etc.)
+COPY --chown=biomni:biomni biomni_env/environment_conda.yml /tmp/environment_conda.yml
+RUN conda env create -f /tmp/environment_conda.yml && \
+    conda clean -afy && \
+    rm /tmp/environment_conda.yml
 
-# Install openpyxl via conda before pip installations
-RUN conda run -n biomni_e1 conda install -y conda-forge::openpyxl
+# Layer 2a – pip packages (core / lightweight)
+COPY --chown=biomni:biomni biomni_env/requirements.txt /tmp/requirements.txt
+RUN conda run -n biomni_e1 pip install --no-cache-dir -r /tmp/requirements.txt && \
+    rm /tmp/requirements.txt
 
-# Install additional LLM / UI dependencies
-SHELL ["conda", "run", "-n", "biomni_e1", "/bin/bash", "-c"]
-RUN pip install langchain-openai langchain-anthropic langchain-ollama \
-    'gradio==5.39.0' 'gradio-client==1.11.0'
+# Layer 2b – pip packages (heavy ML / bioinformatics)
+COPY --chown=biomni:biomni biomni_env/requirements2.txt /tmp/requirements2.txt
+RUN conda run -n biomni_e1 pip install --no-cache-dir -r /tmp/requirements2.txt && \
+    rm /tmp/requirements2.txt
 
-# Install R and DESeq2 into the biomni_e1 conda environment
-SHELL ["/bin/sh", "-c"]
-RUN conda run -n biomni_e1 conda install -y -c conda-forge -c bioconda r-base bioconductor-deseq2 r-png
-
-ENV PATH=/opt/conda/envs/biomni_e1/bin:$PATH
+ENV PATH=/opt/conda/envs/biomni_e1/bin:/app/biomni_tools/bin:$PATH
 ENV CONDA_DEFAULT_ENV=biomni_e1
 
 RUN mkdir -p /app/data
@@ -86,11 +87,7 @@ FROM base AS production
 
 COPY --chown=biomni:biomni . .
 
-SHELL ["conda", "run", "-n", "biomni_e1", "/bin/bash", "-c"]
-RUN pip install -e .
-
-SHELL ["/bin/sh", "-c"]
-ENV PATH=/opt/conda/envs/biomni_e1/bin:/app/biomni_tools/bin:$PATH
+RUN conda run -n biomni_e1 pip install -e .
 
 # Expose Gradio port
 EXPOSE 7860

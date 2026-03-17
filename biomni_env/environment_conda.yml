@@ -1,0 +1,42 @@
+# Conda-only packages for Docker layer caching.
+# The pip packages live in requirements.txt and are installed in a separate
+# Dockerfile layer so that neither layer exceeds Docker Desktop's default
+# 20 GiB BuildKit cache limit.
+name: biomni_e1
+channels:
+  - conda-forge
+  - bioconda
+  - defaults
+dependencies:
+  - python=3.11
+  - pip
+  - openpyxl
+
+  # ── Bioinformatics CLI tools ──
+  - blast
+  - samtools
+  - bowtie2
+  - bwa
+  - bedtools
+  - fastqc
+  - trimmomatic
+  - mafft
+  - gseapy
+  - mageck
+  - plannotate
+
+  # ── R ecosystem ──
+  - r-base>=4.4
+  - r-essentials
+  - r-png
+  - r-pheatmap
+  - r-devtools
+  - r-remotes
+  - r-wgcna
+  - bioconductor-deseq2
+  - bioconductor-dada2
+  - bioconductor-edger
+  - bioconductor-limma
+  - bioconductor-flowcore
+  - bioconductor-xcms
+  - bioconductor-clusterprofiler

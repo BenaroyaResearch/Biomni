@@ -1,0 +1,64 @@
+# Pip packages for Biomni – Layer 2a
+# Split across two files so each Docker layer stays under the BuildKit
+# cache limit.  See also requirements2.txt.
+
+# Core scientific stack
+numpy==2.1
+pandas
+matplotlib
+scipy
+statsmodels
+scikit-learn
+seaborn
+networkx
+
+# LLM / Agent / UI
+gradio==5.39.0
+gradio-client==1.11.0
+langchain
+langgraph==0.3.18
+langchain-openai
+langchain-anthropic
+langchain-ollama
+langchain-community
+openai
+
+# Web / Parsing
+beautifulsoup4
+lxml
+requests
+pyyaml
+googlesearch-python
+PyPDF2
+
+# Jupyter
+jupyter
+notebook
+ipykernel
+
+# Utilities
+tqdm
+packaging>=23.2.0,<26.0
+python-dotenv
+pytest
+mcp
+tooluniverse
+
+# ML / NLP
+transformers
+huggingface-hub
+sentencepiece
+faiss-cpu
+
+# Bioinformatics
+biopython
+biopandas
+biotite
+pymed
+arxiv
+scholarly
+lifelines
+scanpy
+umap-learn
+scrublet
+scvelo

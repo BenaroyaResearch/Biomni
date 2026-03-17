@@ -132,6 +132,20 @@ export LLM_SOURCE="Groq" # Optional: set this to use models served by Groq
 
 Some Python packages are not installed by default in the Biomni environment due to dependency conflicts. If you need these features, you must install the packages manually and may need to uncomment relevant code in the codebase. See the up-to-date list and details in [docs/known_conflicts.md](./docs/known_conflicts.md).
 
+### Dev Container Setup (Docker)
+
+You can develop inside a fully configured container using VS Code's **Dev Containers** extension. The devcontainer uses the same Dockerfile and conda environment as production.
+
+1. Install [Docker Desktop](https://www.docker.com/products/docker-desktop/) and the [Dev Containers](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers) VS Code extension.
+2. Open the repo folder in VS Code, then run **Dev Containers: Reopen in Container** from the Command Palette.
+
+> **Note on Docker build caching:** The Dockerfile splits environment setup into
+> three layers (conda packages, core pip packages, and heavy ML/bioinformatics
+> pip packages) so that each layer stays under Docker Desktop's 20 GiB BuildKit
+> cache limit. Consolidating them into fewer steps can produce layers that exceed
+> the limit and get garbage-collected after every build, causing a full rebuild
+> each time you reopen the container.
+
 ### Basic Usage
 
 Once inside the environment, you can start using Biomni:

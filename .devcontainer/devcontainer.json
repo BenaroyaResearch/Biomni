@@ -14,7 +14,7 @@
   "remoteUser": "biomni",
   "containerEnv": {
     "CONDA_DEFAULT_ENV": "biomni_e1",
-    "PATH": "/opt/conda/envs/biomni_e1/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+    "PATH": "/opt/conda/envs/biomni_e1/bin:/app/biomni_tools/bin:/opt/conda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
   },
   "postCreateCommand": "conda run -n biomni_e1 pip install -e /workspace",
   "forwardPorts": [7860],
