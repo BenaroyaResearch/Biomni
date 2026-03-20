@@ -1,0 +1,1 @@
+conda run --no-capture-output -n biomni_e1 python -c "from biomni.agent import A1; agent = A1(path='/app/data'); agent.launch_gradio_demo(server_name='0.0.0.0', require_verification=True)"

@@ -2,18 +2,6 @@
 
 This directory contains scripts and configuration files to set up a comprehensive bioinformatics environment with various tools and packages.
 
-## System Dependencies
-
-Before setting up the Biomni environment, ensure the following system libraries are installed (Ubuntu/Debian):
-
-```bash
-sudo apt-get install -y zlib1g-dev libpng-dev
-```
-
-For other Linux distributions or macOS, install equivalent packages through your package manager.
-
-## Setup Instructions
-
 1. Clone the repository:
    ```bash
    git clone https://github.com/snap-stanford/Biomni.git

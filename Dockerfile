@@ -2,9 +2,9 @@
 # Note: Built for x86_64/amd64 as many bioinformatics tools (including openmm) don't support ARM64
 #
 # Stages:
-#   base        – heavy shared setup (conda env, pip deps, R)
+#   base        – heavy shared setup (conda env, pip deps, R, CLI tools via setup.sh)
 #   devcontainer– adds sudo for the dev user; code is bind-mounted at runtime
-#   production  – clones the repo, installs the package, exposes the Gradio port
+#   production  – copies the repo, installs the package, exposes the Gradio port
 
 # =============================================================================
 # base – shared by all downstream stages
@@ -46,24 +46,12 @@ RUN wget --progress=dot:giga https://github.com/conda-forge/miniforge/releases/l
 
 ENV PATH=/opt/conda/bin:$PATH
 
-# Create the conda environment in three layers so each stays under Docker
-# Desktop's default 20 GiB BuildKit cache limit.
-# Layer 1 – conda packages (R, bioinformatics CLI tools, etc.)
-COPY --chown=biomni:biomni biomni_env/environment_conda.yml /tmp/environment_conda.yml
-RUN conda env create -f /tmp/environment_conda.yml && \
+# Copy the environment setup directory and run setup.sh in non-interactive mode.
+# Run from /app so CLI tools install to /app/biomni_tools (matching the PATH).
+COPY --chown=biomni:biomni biomni_env/ /app/biomni_env/
+RUN cd /app/biomni_env && NON_INTERACTIVE=1 bash setup.sh && \
     conda clean -afy && \
-    rm /tmp/environment_conda.yml
-
-# Layer 2a – pip packages (core / lightweight)
-COPY --chown=biomni:biomni biomni_env/requirements.txt /tmp/requirements.txt
-RUN conda run -n biomni_e1 pip install --no-cache-dir -r /tmp/requirements.txt && \
-    rm /tmp/requirements.txt
-
-# Layer 2b – pip packages (heavy ML / bioinformatics)
-COPY --chown=biomni:biomni biomni_env/requirements2.txt /tmp/requirements2.txt
-RUN conda run -n biomni_e1 pip install --no-cache-dir -r /tmp/requirements2.txt && \
-    rm /tmp/requirements2.txt
-
+    rm -rf /app/biomni_env
 ENV PATH=/opt/conda/envs/biomni_e1/bin:/app/biomni_tools/bin:$PATH
 ENV CONDA_DEFAULT_ENV=biomni_e1
 

@@ -1,9 +1,5 @@
 # Biomni v0.0.8 - Incremental Software Installation
 # Add any new packages/software introduced in version 0.0.8 below
-
-# System dependencies (Ubuntu/Debian)
-# sudo apt-get install -y zlib1g-dev libpng-dev
-
 pip install transformers sentencepiece langchain-google-genai langchain_ollama mcp
 pip install lazyslide
 pip install "git+https://github.com/YosefLab/popV.git@refs/pull/100/head"
@@ -19,4 +15,4 @@ uv tool install arc-state
 pip install nnunet nibabel nilearn
 pip install mi-googlesearch-python
 pip install git+https://github.com/pylabrobot/pylabrobot.git
-conda install -c conda-forge weasyprint r-png
+conda install weasyprint
