@@ -14,7 +14,8 @@ FROM --platform=linux/amd64 ubuntu:22.04 AS base
 WORKDIR /app
 
 # Install system dependencies
-RUN apt-get update && apt-get install -y \
+RUN DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get update && \
+    DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y \
     git \
     build-essential \
     curl \
@@ -27,7 +28,10 @@ RUN apt-get update && apt-get install -y \
     libncurses5-dev \
     libcurl4-openssl-dev \
     libssl-dev \
+    r-cran-nloptr \
     && rm -rf /var/lib/apt/lists/*
+
+RUN curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Set locale environment variables to prevent R warnings
 # C.UTF-8 is available by default in Ubuntu

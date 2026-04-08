@@ -8,9 +8,10 @@
   "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind,consistency=cached",
   "workspaceFolder": "/workspace",
   "mounts": [
-    "source=${localWorkspaceFolder}/docker-data,target=/app/data,type=bind,consistency=cached"
+    "source=${localWorkspaceFolder}/docker-data,target=/app/data,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/docker-data/user,target=/mnt/data,type=bind,consistency=cached"
   ],
-  "initializeCommand": "mkdir -p ${localWorkspaceFolder}/docker-data",
+  "initializeCommand": "mkdir -p ${localWorkspaceFolder}/docker-data ${localWorkspaceFolder}/docker-data/user",
   "remoteUser": "biomni",
   "containerEnv": {
     "CONDA_DEFAULT_ENV": "biomni_e1",

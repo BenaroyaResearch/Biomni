@@ -117,16 +117,23 @@ for (pkg in remaining_bioc) {
   install_if_missing(pkg, bioconductor = TRUE)
 }
 
-# Verify installations
+# Verify installations — exit with non-zero status if any package fails to load
 cat("\nVerifying installations...\n")
-all_packages <- c(cran_packages, bioc_packages, "WGCNA")
+all_packages <- c(cran_packages, bioc_packages, "WGCNA", "clusterProfiler")
+failed <- character(0)
 for (pkg in unique(all_packages)) {
   if (require(pkg, character.only = TRUE, quietly = TRUE)) {
     cat(sprintf("✓ Package %s is successfully installed\n", pkg))
   } else {
     cat(sprintf("✗ Package %s is NOT installed\n", pkg))
+    failed <- c(failed, pkg)
   }
 }
 
-cat("\nPackage installation completed!\n")
-cat("If you still encounter issues with specific packages, please install them manually.\n")
+if (length(failed) > 0) {
+  cat(sprintf("\nERROR: %d package(s) failed to load: %s\n",
+              length(failed), paste(failed, collapse = ", ")))
+  quit(status = 1)
+}
+
+cat("\nAll R packages installed and verified successfully!\n")
